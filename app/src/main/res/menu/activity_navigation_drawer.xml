@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+        android:id="@+id/nav_navigation"
+        android:icon="@drawable/ic_menu_home"
+        android:title="Home" />
+        <item
+            android:id="@+id/nav_post"
+            android:icon="@drawable/ic_action_name"
+            android:title="Post Song" />
+
+    </group>
+
+    <item android:title="Genres">
+        <menu>
+            <item
+                android:id="@+id/nav_pop"
+                android:icon="@drawable/ic_menu_genre"
+                android:title="Pop" />
+            <item
+                android:id="@+id/nav_classic"
+                android:icon="@drawable/ic_menu_genre"
+                android:title="Classic" />
+            <item
+                android:id="@+id/nav_hiphop"
+                android:icon="@drawable/ic_menu_genre"
+                android:title="Hip Hop" />
+        </menu>
+    </item>
+
+</menu>
