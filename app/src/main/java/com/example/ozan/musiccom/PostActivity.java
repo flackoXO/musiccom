@@ -76,14 +76,8 @@ public class PostActivity extends AppCompatActivity
         switch (id) {
 
             case R.id.nav_navigation:
-                Intent h = new Intent(PostActivity.this, HomeActivity.class);
-                startActivity(h);
+                finish();
                 break;
-            case R.id.nav_post:
-                Intent i = new Intent(PostActivity.this, PostActivity.class);
-                startActivity(i);
-                break;
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

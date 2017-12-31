@@ -1,11 +1,8 @@
 package com.example.ozan.musiccom;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -42,20 +39,23 @@ public class HomeActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-
-        final TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
-        final TextView tvKind = (TextView) findViewById(R.id.tvKind);
+        navigationView.getMenu().findItem(R.id.nav_navigation).setChecked(true);
 
         Intent intent = getIntent();
         String username = intent.getStringExtra("username");
         String kind = intent.getStringExtra("kind");
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        HomeFragment homeFragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("username", username);
+        bundle.putString("kind", kind);
+        homeFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.fragment_holder, homeFragment);
+        fragmentTransaction.commit();
 
-        tvUsername.setText(username);
-        tvKind.setText(kind);
-
-        if(tvKind.getText().equals("Listener")){
+        /*if(tvKind.getText().equals("Listener")){
             hideItem();
-        }
+        }*/
     }
 
     public void hideItem(){
@@ -69,6 +69,9 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                navigationView.getMenu().findItem(R.id.nav_navigation).setChecked(true);
+            }
             super.onBackPressed();
         }
     }
@@ -101,14 +104,20 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         switch (id) {
-            case R.id.nav_navigation:
-                Intent h = new Intent(HomeActivity.this, HomeActivity.class);
-                startActivity(h);
+            case R.id.nav_post: {
+                PostFragment postFragment = new PostFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_holder, postFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
                 break;
-            case R.id.nav_post:
-                Intent i = new Intent(HomeActivity.this, PostActivity.class);
-                startActivity(i);
+            }
+            case R.id.nav_navigation: {
+                if (!item.isChecked()) {
+                    getSupportFragmentManager().popBackStack();
+                }
                 break;
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
