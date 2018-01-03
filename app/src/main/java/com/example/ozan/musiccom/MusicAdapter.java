@@ -38,8 +38,12 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
+        return musicDataList == null ? 0 : musicDataList.size();
+    }
 
-        return musicDataList.size();
+    public void replaceMusicDataList(List<MusicData> newList) {
+        musicDataList = newList;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

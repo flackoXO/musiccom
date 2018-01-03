@@ -2,6 +2,13 @@ package com.example.ozan.musiccom;
 
 import android.util.Log;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,6 +66,13 @@ public class HttpHandler {
             }
         }
         return sb.toString();
+    }
+
+    public static JSONArray fetchJSONArrayFromUrl(String url) throws IOException, JSONException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+        Response response = client.newCall(request).execute();
+        return new JSONArray(response.body().string());
     }
 
 }

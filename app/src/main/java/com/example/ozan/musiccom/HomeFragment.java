@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,39 +29,32 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private MusicAdapter musicAdapter;
-    private View myFragmentView;
 
     private String TAG = HomeActivity.class.getSimpleName();
     private ProgressDialog pDialog;
     // URL to get contacts JSON
     private static String url = "http://xotwod.000webhostapp.com/Blog.php";
 
-    List<MusicData> musicDataList = new ArrayList<>();
-    public MusicData musicData;
+    List<MusicData> musicDataList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        myFragmentView = inflater.inflate(R.layout.fragment_home, container, false);
-
-        new GetMusic().execute();
-
-         /*recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
-        final TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
-        final TextView tvArtist = (TextView) v.findViewById(R.id.tvArtist);
-        final TextView tvGenre = (TextView) v.findViewById(R.id.tvGenre);
-
-        tvTitle.setText(b.getString("title"));
-        tvArtist.setText(b.getString("artist"));
-        tvGenre.setText(b.getString("artist"));*/
-
-        return myFragmentView;
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
+        recyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        musicAdapter = new MusicAdapter(getContext(), null);
+        recyclerView.setAdapter(musicAdapter);
+        return v;
     }
 
-    class GetMusic extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onResume() {
+        super.onResume();
+        new GetMusic().execute();
+    }
+
+    class GetMusic extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -70,76 +64,42 @@ public class HomeFragment extends Fragment {
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
             pDialog.show();
-
         }
 
         @Override
-        protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
-
-            String jsonStr = sh.makeServiceCall(url);
-
-            Log.e(TAG, "Response from url: " + jsonStr);
-
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-
-                    // Getting JSON Array node
-                    JSONArray post = jsonObj.getJSONArray("post");
-
-                    // looping through All tracks
-                    for (int i = 0; i < post.length(); i++) {
-                        JSONObject p = post.getJSONObject(i);
-                        MusicData m = new MusicData();
-                        m.title = p.getString("title");
-                        m.artist = p.getString("artist");
-                        m.genre = p.getString("genre");
-
-                        musicDataList.add(musicData);
-                    }
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getActivity().getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    });
-
+        protected Boolean doInBackground(Void... arg0) {
+            boolean fetched = false;
+            try {
+                JSONArray posts = HttpHandler.fetchJSONArrayFromUrl(url);
+                musicDataList = new ArrayList<>();
+                for (int i = 0; i < posts.length(); i++) {
+                    JSONObject p = posts.getJSONObject(i);
+                    MusicData m = new MusicData();
+                    m.title = p.getString("title");
+                    m.artist = p.getString("artist");
+                    m.genre = p.getString("genre");
+                    Log.d(TAG, m.toString());
+                    musicDataList.add(m);
                 }
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
-
+                fetched = false;
+            } catch (IOException e) {
+                Log.e(TAG, "IOException when fetching posts from url: " + e.getMessage());
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException when fetching posts from url: " + e.getMessage());
             }
-
-            return null;
+            return fetched;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-
             pDialog.dismiss();
-
-            recyclerView = (RecyclerView) myFragmentView.findViewById(R.id.recycler_view);
-            recyclerView.setHasFixedSize(true);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-            recyclerView.setLayoutManager(layoutManager);
-            musicAdapter = new MusicAdapter(getActivity(), musicDataList);
-            recyclerView.setAdapter(musicAdapter);
+            if (result) {
+                Log.d(TAG, "Successfully fetched posts");
+                musicAdapter.replaceMusicDataList(musicDataList);
+            } else {
+                Log.d(TAG, "Failed to fetch posts");
+            }
         }
 
     }
