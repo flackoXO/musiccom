@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
         final EditText etName = (EditText) findViewById(R.id.etName);
         final EditText etUsername = (EditText) findViewById(R.id.etUsername);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
+
+        final ImageView ivLogo = (ImageView) findViewById(R.id.ivLogo);
 
         final Button btLogin = (Button) findViewById(R.id.btLogin);
         final TextView btRegister = (TextView) findViewById(R.id.tvRegisterHere);

@@ -1,4 +1,5 @@
 package com.example.ozan.musiccom;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,10 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class HomeActivity extends AppCompatActivity
@@ -30,6 +33,8 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
 
+        setTitle("MusicCom");
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -44,19 +49,30 @@ public class HomeActivity extends AppCompatActivity
         Intent intent = getIntent();
         String username = intent.getStringExtra("username");
         String kind = intent.getStringExtra("kind");
+        String title = intent.getStringExtra("title");
+        String artist = intent.getStringExtra("artist");
+        String genre = intent.getStringExtra("genre");
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         HomeFragment homeFragment = new HomeFragment();
+
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
         bundle.putString("kind", kind);
+        bundle.putString("title", title);
+        bundle.putString("artist", artist);
+        bundle.putString("genre", genre);
+
         homeFragment.setArguments(bundle);
+
         fragmentTransaction.add(R.id.fragment_holder, homeFragment);
         fragmentTransaction.commit();
 
-        /*if(tvKind.getText().equals("Listener")){
+        if(kind.equals("Listener")){
             hideItem();
-        }*/
+        }
     }
+
 
     public void hideItem(){
         Menu nav_Menu = navigationView.getMenu();
@@ -91,8 +107,8 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_logout) {
+            this.finish();
         }
 
         return super.onOptionsItemSelected(item);

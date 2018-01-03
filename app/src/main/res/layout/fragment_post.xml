@@ -1,14 +1,118 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ozan.musiccom.PostFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Post Fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="27dp"
+        android:text="Title" />
+
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="57dp"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/tvTitle"
+        android:layout_toRightOf="@+id/tvTitle"
+        android:ems="10"
+        android:hint="Title of the song..."
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tvArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvTitle"
+        android:layout_alignStart="@+id/tvTitle"
+        android:layout_below="@+id/etTitle"
+        android:layout_marginTop="52dp"
+        android:text="Artist" />
+
+    <EditText
+        android:id="@+id/etArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/etTitle"
+        android:layout_alignRight="@+id/etTitle"
+        android:layout_below="@+id/etTitle"
+        android:layout_marginTop="38dp"
+        android:ems="10"
+        android:hint="Name of the artist..."
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tvHiddenGenre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etArtist"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tvGenre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvHiddenGenre"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:text="Genre" />
+
+    <RadioButton
+        android:id="@+id/rbPop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvArtist"
+        android:layout_alignStart="@+id/tvArtist"
+        android:layout_below="@+id/tvGenre"
+        android:layout_marginTop="66dp"
+        android:text="Pop" />
+
+    <RadioButton
+        android:id="@+id/rbHiphop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/rbPop"
+        android:layout_alignBottom="@+id/rbPop"
+        android:layout_centerHorizontal="true"
+        android:text="HipHop" />
+
+    <RadioButton
+        android:id="@+id/rbRock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/rbHiphop"
+        android:layout_alignBottom="@+id/rbHiphop"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="19dp"
+        android:layout_marginRight="19dp"
+        android:text="Rock" />
+
+    <Button
+        android:id="@+id/btPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/rbPop"
+        android:layout_marginTop="63dp"
+        android:text="POST" />
+
+</RelativeLayout>

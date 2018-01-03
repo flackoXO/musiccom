@@ -27,10 +27,6 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_navigation"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".PostActivity"
-            android:label="@string/title_activity_post"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
